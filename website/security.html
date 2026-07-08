@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security | Meridian Cyber Solutions</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a href="index.html" class="logo">Meridian<span>Cyber</span></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">&#9776;</button>
+    <nav id="siteNav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="security.html" class="active">Security</a>
+      <a href="careers.html">Careers</a>
+      <a href="status.html">Status</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>How We Secure This Site</h1>
+    <p>We practice what we sell. This page documents the real controls protecting this environment.</p>
+  </div>
+</section>
+
+<main class="container content">
+  <h2>Identity &amp; Access</h2>
+  <p>All infrastructure changes are made through named IAM roles scoped to least privilege. The AWS account root user is not used for daily operations, is protected with multi-factor authentication, and has no active access keys.</p>
+
+  <h2>Logging &amp; Audit Trail</h2>
+  <p>AWS CloudTrail records every API call made in this account, including who made it, from where, and what it changed. Logs are delivered to a dedicated, encrypted, access-restricted S3 bucket and retained for audit purposes.</p>
+
+  <h2>Threat Detection</h2>
+  <p>Amazon GuardDuty continuously analyzes account activity, network traffic metadata, and DNS queries for indicators of compromise. Findings are aggregated in AWS Security Hub alongside configuration compliance checks from AWS Config.</p>
+
+  <h2>Data Protection</h2>
+  <p>Data at rest is encrypted using AWS Key Management Service (KMS) with customer-managed keys. The website content bucket blocks public write access, and public read access is limited to the specific objects required to serve the site.</p>
+
+  <h2>Alerting &amp; Response</h2>
+  <p>High-severity findings trigger automated notifications through Amazon SNS so they can be triaged quickly rather than discovered during a periodic review.</p>
+
+  <h2>Responsible Disclosure</h2>
+  <p>This is a portfolio and demonstration environment rather than a production system handling real customer data. If you believe you have found a genuine issue with how this site is configured, please reach out through the contact page.</p>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-wrap">
+    <p>&copy; 2026 Meridian Cyber Solutions. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="status.html">Status</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>
