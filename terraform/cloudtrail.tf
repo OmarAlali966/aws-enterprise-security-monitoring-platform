@@ -8,14 +8,15 @@
 #   1. An S3 bucket to store those log files (encrypted + versioned).
 #   2. A bucket policy that lets ONLY the CloudTrail service write to it.
 #   3. A CloudTrail 'trail' resource that turns logging on, across ALL
-#      AWS regions, with tamper-evidence (log file validation) enabled.
+#      AWS regions, with tamper-evidence (log file validation) enabled, and
+#      ALSO streams a live copy of every event into CloudWatch Logs (see
+#      cloudwatch.tf) so metric filters and alarms can react in real time.
 #
 # WHY A REAL COMPANY USES THIS:
 # - It is the primary evidence source for security investigations, breach
 #   forensics, and compliance audits (PCI-DSS, SOC 2, HIPAA all require it).
-# - GuardDuty, Security Hub, and AWS Config (built in later stages) all
-#   depend on CloudTrail being enabled - it is the foundation of the whole
-#   monitoring platform.
+# - GuardDuty, Security Hub, and AWS Config all depend on CloudTrail being
+#   enabled - it is the foundation of the whole monitoring platform.
 # - Multi-region trails catch attackers who deliberately operate in a
 #   region the security team doesn't normally look at.
 #
@@ -27,6 +28,9 @@
 # - Not enabling log file validation, which means there's no cryptographic
 #   proof the logs weren't altered after the fact.
 # - Not encrypting logs with a customer-managed KMS key (see kms.tf).
+# - Sending logs to S3 only, with no real-time path to an alarm - S3 is
+#   durable but not designed for the kind of live pattern-matching that
+#   CloudWatch Logs metric filters provide.
 # =============================================================================
 
 # -----------------------------------------------------------------------------
@@ -164,6 +168,13 @@ resource "aws_cloudtrail" "main" {
   # Encrypt every log file with our own KMS key instead of the AWS default.
   kms_key_id = aws_kms_key.cloudtrail.arn
 
+  # Stream a live copy of every event into the CloudWatch Logs group
+  # created in cloudwatch.tf, using the dedicated delivery role created
+  # there. This is what makes real-time metric filters and alarms
+  # possible - the S3 copy above is for durable, long-term storage only.
+  cloud_watch_logs_group_arn = "${aws_cloudwatch_log_group.cloudtrail.arn}:*"
+  cloud_watch_logs_role_arn  = aws_iam_role.cloudtrail_cloudwatch.arn
+
   # Management events = control-plane actions (creating/deleting resources,
   # changing IAM policies, etc.) - the most important events for a security
   # monitoring platform. We log both successful AND failed attempts, since
@@ -176,9 +187,13 @@ resource "aws_cloudtrail" "main" {
 
   # The trail must not be created until the bucket policy exists, otherwise
   # CloudTrail will reject the trail because it cannot yet write to the
-  # bucket. Terraform usually infers this from the references above, but we
-  # state it explicitly for clarity.
-  depends_on = [aws_s3_bucket_policy.cloudtrail_logs]
+  # bucket. The same is true for the CloudWatch Logs delivery role/policy.
+  # Terraform usually infers this from the references above, but we state
+  # it explicitly for clarity.
+  depends_on = [
+    aws_s3_bucket_policy.cloudtrail_logs,
+    aws_iam_role_policy.cloudtrail_cloudwatch
+  ]
 
   tags = {
     Name = "${var.project_name}-trail"
