@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | Meridian Cyber Solutions</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a href="index.html" class="logo">Meridian<span>Cyber</span></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">&#9776;</button>
+    <nav id="siteNav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="security.html">Security</a>
+      <a href="careers.html">Careers</a>
+      <a href="status.html">Status</a>
+      <a href="contact.html" class="active">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <h1>Contact Us</h1>
+    <p>Tell us about your environment and what you are trying to protect.</p>
+  </div>
+</section>
+
+<main class="container content">
+  <p>This is a demo contact form for a fictional company built as part of a security engineering portfolio project. Submitting it will not send a real message.</p>
+  <form class="contact-form">
+    <div>
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" required>
+    </div>
+    <div>
+      <label for="email">Work Email</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+    <div>
+      <label for="topic">Topic</label>
+      <select id="topic" name="topic">
+        <option>Cloud Security Architecture</option>
+        <option>Threat Detection Engineering</option>
+        <option>Incident Response Readiness</option>
+        <option>Compliance Monitoring</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div>
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="5" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Send Message</button>
+    <p id="formStatus"></p>
+  </form>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-wrap">
+    <p>&copy; 2026 Meridian Cyber Solutions. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="status.html">Status</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>
