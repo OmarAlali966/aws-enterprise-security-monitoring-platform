@@ -1,0 +1,10 @@
+# Copy this file to terraform.tfvars and fill in real values.
+# terraform.tfvars is listed in .gitignore, so your real values never get
+# committed to GitHub. This .example file is committed instead, purely as
+# documentation of what inputs the project expects.
+
+aws_region  = "us-east-1"
+project_name = "meridian-security-platform"
+environment  = "dev"
+alert_email  = "you@example.com"
+enable_config_recorder = true
