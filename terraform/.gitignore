@@ -1,0 +1,27 @@
+# Local .terraform directories (downloaded providers/modules - do not commit)
+**/.terraform/*
+
+# Terraform state files. These can contain sensitive values and are specific
+# to a single deployment, so they should never be committed to a public repo.
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Any .tfvars files may contain real values like your alert email. Only the
+# .example file should be committed.
+*.tfvars
+*.tfvars.json
+!terraform.tfvars.example
+
+# Local override files (used for personal testing, not shared)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI configuration files that may contain credentials
+.terraformrc
+terraform.rc
