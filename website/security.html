@@ -38,7 +38,10 @@
 <p>AWS CloudTrail records every API call made in this account, including who made it, from where, and what it changed. The trail is enabled across every AWS region and captures global service events, so activity cannot hide in a region the team does not normally monitor. Every delivered log file is cryptographically validated so any tampering can be detected, encrypted at rest with a dedicated customer-managed KMS key, and stored in a versioned S3 bucket that blocks all public access and rejects any request that is not sent over HTTPS.</p>
 
 <h2>Threat Detection</h2>
-<p>Amazon GuardDuty continuously analyzes account activity, network traffic metadata, and DNS queries for indicators of compromise. Findings are aggregated in AWS Security Hub alongside configuration compliance checks from AWS Config.</p>
+<p>Amazon GuardDuty continuously analyzes account activity, network traffic metadata, and DNS queries for indicators of compromise such as compromised credentials, cryptomining, and reconnaissance against our AWS resources. Findings are automatically aggregated in AWS Security Hub, which also runs the AWS Foundational Security Best Practices standard against every resource in the account and assigns an overall compliance score.</p>
+
+<h2>Configuration Compliance</h2>
+<p>AWS Config continuously records the configuration of every supported resource in this account and evaluates it against a set of automated rules, including checks for public S3 buckets, unencrypted storage, overly permissive IAM policies, and security groups left open to the internet. Any resource that drifts out of compliance is flagged immediately rather than being discovered during a periodic manual review.</p>
 
 <h2>Data Protection</h2>
 <p>Data at rest is encrypted using AWS Key Management Service (KMS) with customer-managed keys, each governed by a key policy that names exactly which accounts, services, and roles may use it. The website content bucket blocks public write access, and public read access is limited to the specific objects required to serve the site.</p>
