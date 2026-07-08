@@ -43,11 +43,14 @@
 <h2>Configuration Compliance</h2>
 <p>AWS Config continuously records the configuration of every supported resource in this account and evaluates it against a set of automated rules, including checks for public S3 buckets, unencrypted storage, overly permissive IAM policies, and security groups left open to the internet. Any resource that drifts out of compliance is flagged immediately rather than being discovered during a periodic manual review.</p>
 
+<h2>Real-Time Monitoring &amp; Alerting</h2>
+<p>CloudTrail activity is streamed live into Amazon CloudWatch Logs, where automated metric filters watch for specific high-risk patterns: use of the AWS root account, repeated failed console login attempts, IAM policy changes, security group changes, CloudTrail itself being stopped or modified, and unauthorized API calls. Each pattern is backed by a CloudWatch Alarm that publishes to Amazon SNS the moment it fires, delivering an email notification within minutes so these events are never discovered only during a periodic review. A CloudWatch Dashboard gives the security team a single, at-a-glance view of all of these signals over time.</p>
+
 <h2>Data Protection</h2>
 <p>Data at rest is encrypted using AWS Key Management Service (KMS) with customer-managed keys, each governed by a key policy that names exactly which accounts, services, and roles may use it. The website content bucket blocks public write access, and public read access is limited to the specific objects required to serve the site.</p>
 
 <h2>Alerting &amp; Response</h2>
-<p>High-severity findings trigger automated notifications through Amazon SNS so they can be triaged quickly rather than discovered during a periodic review.</p>
+<p>High-severity findings and the real-time alarms described above trigger automated notifications through Amazon SNS so they can be triaged quickly rather than discovered during a periodic review.</p>
 
 <h2>Responsible Disclosure</h2>
 <p>This is a portfolio and demonstration environment rather than a production system handling real customer data. If you believe you have found a genuine issue with how this site is configured, please reach out through the contact page.</p>
