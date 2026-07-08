@@ -5,7 +5,8 @@
 This document ties together every stage built so far into a single
 picture: the identity foundation (IAM), the audit trail (CloudTrail +
 KMS), the detection and compliance layer (GuardDuty, Security Hub, AWS
-Config), and the public-facing website these controls protect.
+Config), the real-time alerting layer (CloudWatch + SNS), and the
+public-facing website these controls protect.
 
 ## Company Context
 
@@ -38,6 +39,14 @@ flowchart TB
         SecurityHub[Security Hub\nAFSBP Standard]
     end
 
+    subgraph Alerting[Real-Time Alerting - Stage 5]
+        LogGroup[CloudWatch Log Group]
+        MetricFilters[6 Metric Filters]
+        Alarms[6 CloudWatch Alarms]
+        SNSTopic[SNS Topic\nsecurity-alerts]
+        Dashboard[CloudWatch Dashboard]
+    end
+
     subgraph App[Application - Stage 1]
         Website[Meridian Cyber Solutions Website]
     end
@@ -47,10 +56,16 @@ flowchart TB
     App -->|API activity recorded by| CloudTrail
     CloudTrail -->|encrypted with| KMSKey
     CloudTrail -->|delivers logs to| CTBucket
+    CloudTrail -->|live stream| LogGroup
+    LogGroup --> MetricFilters
+    MetricFilters --> Alarms
+    MetricFilters --> Dashboard
+    Alarms -->|publishes to| SNSTopic
+    SNSTopic -->|emails| Analyst[Security Analyst]
     Config -->|delivers snapshots to| ConfigBucket
     Config -->|non-compliant findings| SecurityHub
     GuardDuty -->|threat findings| SecurityHub
-    SecurityHub -->|single dashboard for| Analyst[Security Analyst]
+    SecurityHub -->|single dashboard for| Analyst
 ```
 
 ## Stage-by-Stage Summary
@@ -61,6 +76,7 @@ flowchart TB
 | 2 | IAM groups, roles, password policy | `docs/iam.md` |
 | 3 | CloudTrail, KMS, encrypted log storage | `docs/cloudtrail.md` |
 | 4 | GuardDuty, Security Hub, AWS Config | `docs/guardduty.md`, `docs/securityhub.md`, `docs/config.md`, `docs/incident-response.md` |
+| 5 | CloudWatch Logs, metric filters, alarms, SNS | `docs/cloudwatch.md` |
 
 ## Design Principles Followed Throughout
 
@@ -72,13 +88,17 @@ flowchart TB
 - **Detection feeds one dashboard:** GuardDuty and Config findings both
   flow into Security Hub, so an analyst never has to check more than one
   place to see the account's overall security posture.
+- **Detection is paired with real-time notification:** every high-risk
+  pattern this platform watches for (root usage, failed logins, IAM/
+  security-group changes, logging tampering, unauthorized calls) reaches
+  a human via SNS within minutes, not just a dashboard someone has to
+  remember to check.
 - **Cost-consciousness:** every design decision explicitly calls out
   Free Tier impact and cost trade-offs (for example, choosing SSE-S3 over
   a second KMS key for the Config bucket) in code comments.
 
 ## What's Still Planned
 
-Future stages will add CloudWatch Logs/Alarms and Amazon SNS for
-real-time alerting, S3 + CloudFront for production website hosting, and a
-final documentation pass covering the complete resume summary and a full
-technical/behavioral interview question bank.
+Future stages will add S3 + CloudFront for production website hosting,
+and a final documentation pass covering the complete resume summary and
+a full technical/behavioral interview question bank.
